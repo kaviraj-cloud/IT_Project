@@ -26,7 +26,7 @@ pipeline {
                // Package both the HTML file and the images folder
                 //sh 'tar -czf my-html-project.tar.gz index.html images/'
             echo
-            package created
+            'package created'
                 // Archive the artifact for download from Jenkins UI
                 //archiveArtifacts artifacts: 'my-html-project.tar.gz', allowEmptyArchive: false
             }
