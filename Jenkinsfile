@@ -1,65 +1,75 @@
 pipeline {
     agent any 
 
+
+    /*environment {
+        YOUR_SECRET_KEY = 'yourActualSecretKeyHere'
+    }
+
+    parameters {
+        string(name: 'ciBuildVersion', defaultValue: '1.0.0', description: 'Build version')
+        choice(name: 'ciBuildEnv', choices: ['prod', 'dev', 'staging'], description: 'Build environment')
+    }*/
+
     stages {
-        stage('Build') {
+        stage('Dependencies') {
             steps {
-                echo "Build Process"
+                echo 'Fetching dependencies...'
+                //sh 'make deps'
             }
         }
 
-        /*stage('SonarQube analysis') {
+        stage('Test') {
             steps {
-                withSonarQubeEnv('SonarQubeServer') { 
-                    script {
-                        def scannerHome = tool 'sonar';
-                        withEnv(["PATH+SONAR=${scannerHome}/bin"]) {
-                            sh 'sonar-scanner -Dsonar.projectKey=Website-Demo -Dsonar.sources=. -Dsonar.host.url=http://172.28.12.3 -Dsonar.login=squ_ebb01c277845e44f2905715368e656d090da3c31'
-                        }
-                    }
-                }
+                echo 'Running tests...'
+                //sh 'make test'
             }
-        } */
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the binary...'
+                /*script {
+                    def ciGitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    def ciBuildTimestamp = sh(script: 'date +"%Y-%m-%d%H:%M:%S"', returnStdout: true).trim()
+                    def ciBuildBranch = env.BRANCH_NAME // This will fetch the branch name for multibranch pipelines, for regular jobs you might need to fetch it from GIT_BRANCH
+
+                    sh """
+                        make build ciBuildVersion=${params.ciBuildVersion} ciBuildBranch=${ciBuildBranch} ciBuildEnv=${params.ciBuildEnv} ciGitHash=${ciGitHash} ciBuildTimestamp="${ciBuildTimestamp}"
+                    """
+                }*/
+            }
+        }
+
+ 
+         
+
 
         stage('Package') {
             steps {
-               // Package both the HTML file and the images folder
-                //sh 'tar -czf my-html-project.tar.gz index.html images/'
-            echo
-            "package created"
-                // Archive the artifact for download from Jenkins UI
-                //archiveArtifacts artifacts: 'my-html-project.tar.gz', allowEmptyArchive: false
+                echo 'Packaging the binary...'
+                //sh 'make package'
             }
         }
 
-        stage('Create Docker Image') {
+        stage('Cleanup') {
             steps {
-                echo 
-                    "docker image created"
-                //sh 'docker build -t my-html-app:latest .'
-            }
-        }
-
-        stage('Deploy Docker Image') {
-            steps {
-                echo
-                "docker image deploying"
-                //sshagent(['deploy_key']) { // replace 'my-ssh-key-id' with your actual credential ID
-                    //sh 'docker save my-html-app:latest | ssh trgadmin1@172.28.12.4 "docker load"'
-                }
-            }
-        
-
-        stage('Run Docker Container') {
-            steps {
-                echo
-                "docker container running"
-                //sshagent(['deploy_key']) { // replace 'my-ssh-key-id' with your actual credential ID
-                   // sh '''
-                        //ssh trgadmin1@172.28.12.4 'docker run -d -p 82:80 my-html-app:latest'
-                    //'''
-                }
+                echo 'Cleaning up...'
+                //sh 'make clean'
             }
         }
     }
+
+    post {
+        always {
+            echo 'This will always run'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed :('
+        }
+    }
+}
 
