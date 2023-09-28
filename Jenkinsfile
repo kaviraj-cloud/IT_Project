@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 echo
-                Docker Image deploying
+                Docker image deploying
                 //sshagent(['deploy_key']) { // replace 'my-ssh-key-id' with your actual credential ID
                     //sh 'docker save my-html-app:latest | ssh trgadmin1@172.28.12.4 "docker load"'
                 }
