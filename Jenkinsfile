@@ -26,7 +26,7 @@ pipeline {
                // Package both the HTML file and the images folder
                 //sh 'tar -czf my-html-project.tar.gz index.html images/'
             echo
-            Package created
+            package created
                 // Archive the artifact for download from Jenkins UI
                 //archiveArtifacts artifacts: 'my-html-project.tar.gz', allowEmptyArchive: false
             }
@@ -35,7 +35,7 @@ pipeline {
         stage('Create Docker Image') {
             steps {
                 echo 
-                    Docker image created
+                    'docker image created'
                 //sh 'docker build -t my-html-app:latest .'
             }
         }
@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 echo
-                Docker image deploying
+                'docker image deploying'
                 //sshagent(['deploy_key']) { // replace 'my-ssh-key-id' with your actual credential ID
                     //sh 'docker save my-html-app:latest | ssh trgadmin1@172.28.12.4 "docker load"'
                 }
@@ -53,7 +53,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 echo
-                Docker Container running
+                'docker container running'
                 //sshagent(['deploy_key']) { // replace 'my-ssh-key-id' with your actual credential ID
                    // sh '''
                         //ssh trgadmin1@172.28.12.4 'docker run -d -p 82:80 my-html-app:latest'
